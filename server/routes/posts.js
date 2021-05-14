@@ -1,10 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const axios = require('axios')
-
+const request = require('request')
 const fs = require('fs')
-const fetch = require('node-fetch')
-const http = require('http')
 
 let dates;
 fs.readFile('./dates.txt', (err, data) => {
@@ -22,16 +20,14 @@ fs.readFile('./dates.txt', (err, data) => {
 const API_KEY = 'ALVfp5Piptm3W7H1olAdPiDzm2cn9j2VFiR3igHu'
 const API = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=${API_KEY}`
 const BASE_URL = "http://mars.jpl.nasa.gov/"
-async function download(url) {
-    const response = await fetch(url)
-    const buffer = await response.buffer()
 
+const download = (url, callback) => {
     let lastSlash = url.lastIndexOf("/")
     let filename = url.substring(lastSlash + 1)
     let dir = url.substring(BASE_URL.length).replace(filename, '')
-
-    fs.writeFile("./" + dir + filename, buffer, () => {
-        console.log("Finished downloading " + filename)
+    request.head(url,  (err, res, body) => {
+        fs.mkdirSync(dir, { recursive: true });
+        request(url).pipe(fs.createWriteStream(dir + filename)).on('close', callback)
     })
 }
 
@@ -43,7 +39,9 @@ router.get('/', (req, res) => {
                     let img_src = images.data.photos.map(img => img.img_src);
 
                     img_src.forEach(img => {
-                        download(img)
+                        download(img, () => {
+                            console.log('Downloaded ' + img)
+                        })
                     })
 
                     let posts = {}
