@@ -1,0 +1,22 @@
+<!-- <p>posts works!</p> -->
+
+<table border='2'> 
+    <thead>
+        <tr>
+            <!-- <th>user id</th>
+            <th>id</th>
+            <th>title</th>
+            <th>body</th> -->
+            <th scope="column" width="200" align="center">Date</th>
+            <th scope="column" width="150" align="center">Images</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <tr *ngFor="let post of posts">
+            <td>{{post.date}}</td>
+            <td *ngFor="let i of post.images"> <img src="{{i}}" height="100" width="100"/></td> 
+        </tr>
+    </tbody>
+
+</table>
