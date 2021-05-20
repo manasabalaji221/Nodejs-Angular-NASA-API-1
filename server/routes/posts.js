@@ -17,7 +17,7 @@ fs.readFile('./dates.txt', (err, data) => {
     })
 })
 
-const API_KEY = 'ALVfp5Piptm3W7H1olAdPiDzm2cn9j2VFiR3igHu'
+const API_KEY = '//ADD API KEY HERE'
 const API = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=${API_KEY}`
 const BASE_URL = "http://mars.jpl.nasa.gov/"
 
